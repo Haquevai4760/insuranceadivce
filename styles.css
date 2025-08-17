@@ -360,6 +360,27 @@ body {
 .poll-button:hover {
     background: #1e3a5f;
 }
+.ad-mid {
+    max-width: 728px;
+    height: 90px;
+    margin: 24px auto;        /* পোস্টের মাঝে সেন্টার */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e2e3e5;
+    border: 2px dashed #adb5bd;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* মোবাইল রেস্পন্সিভ */
+@media (max-width: 768px) {
+    .ad-mid {
+        max-width: 320px;
+        height: 50px;
+    }
+}
 
 /* Footer */
 .footer {
