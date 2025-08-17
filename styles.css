@@ -33,22 +33,19 @@ body {
     padding: 10px;
     background: #fff3cd;
     border: 2px dashed #ffc107;
-    margin: 0 20px;
+    margin: 0 auto;           /* আগের 0 20px এর জায়গায় */
     border-radius: 5px;
     color: #856404;
     font-size: 14px;
     font-weight: 500;
+
+    max-width: 1200px;        /* প্রস্থ 1200px */
+    height: 90px;             /* উচ্চতা 90px */
+    display: flex;             /* flex দিয়ে সেন্টার */
+    align-items: center;       /* উল্লম্বভাবে সেন্টার */
+    justify-content: center;   /* আড়াআড়ি সেন্টার */
 }
 
-.header-main {
-    padding: 15px 0;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
 
 .header-content {
     display: flex;
