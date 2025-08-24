@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Insurance Premium Calculator</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #eef3f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .calculator {
+      background: #fff;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      width: 400px;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    .calculator h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: #3498db;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      text-align: center;
+      font-weight: bold;
+      color: green;
+    }
+    .toggle {
+      margin-top: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    canvas {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h2>💡 Insurance Premium Calculator</h2>
+
+    <label for="age">Age</label>
+    <input type="number" id="age" placeholder="Enter your age">
+
+    <label for="coverage">Coverage Amount ($)</label>
+    <input type="number" id="coverage" placeholder="Enter coverage amount">
+
+    <label for="term">Policy Term (years)</label>
+    <input type="number" id="term" placeholder="Enter policy term">
+
+    <label for="smoker">Smoker?</label>
+    <select id="smoker">
+      <option value="no">No</option>
+      <option value="yes">Yes</option>
+    </select>
+
+    <div class="toggle">
+      <label for="paymentMode">Payment Mode</label>
+      <select id="paymentMode">
+        <option value="yearly">Yearly</option>
+        <option value="monthly">Monthly</option>
+      </select>
+    </div>
+
+    <button onclick="calculatePremium()">Calculate Premium</button>
+    <div class="result" id="result"></div>
+
+    <canvas id="premiumChart" width="400" height="200"></canvas>
+  </div>
+
+  <script>
+    let chart; // for Chart.js instance
+
+    function calculatePremium() {
+      let age = parseInt(document.getElementById("age").value);
+      let coverage = parseFloat(document.getElementById("coverage").value);
+      let term = parseInt(document.getElementById("term").value);
+      let smoker = document.getElementById("smoker").value;
+      let paymentMode = document.getElementById("paymentMode").value;
+
+      if(!age || !coverage || !term){
+        document.getElementById("result").innerHTML = "⚠️ Please fill all fields!";
+        return;
+      }
+
+      // Simple formula (demo only, not real insurance math)
+      let baseRate = 0.05; 
+      let premium = (coverage / 1000) * baseRate;
+
+      if(age > 40) premium *= 1.5;
+      if(age > 60) premium *= 2;
+
+      if(smoker === "yes") premium *= 1.8;
+
+      premium = premium * (term / 10);
+
+      let yearlyPremium = premium;
+      let monthlyPremium = yearlyPremium / 12;
+
+      let finalPremium = (paymentMode === "yearly") ? yearlyPremium : monthlyPremium;
+
+      document.getElementById("result").innerHTML = 
+        `💰 Estimated Premium: $${finalPremium.toFixed(2)} / ${paymentMode}`;
+
+      // Chart.js
+      let ctx = document.getElementById("premiumChart").getContext("2d");
+      if(chart) chart.destroy(); // reset old chart
+      chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ["Yearly", "Monthly"],
+          datasets: [{
+            label: "Premium Amount ($)",
+            data: [yearlyPremium.toFixed(2), monthlyPremium.toFixed(2)],
+            backgroundColor: ["#3498db", "#2ecc71"]
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
